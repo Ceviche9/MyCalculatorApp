@@ -11,6 +11,9 @@ class MainActivity : AppCompatActivity() {
     private var tvResult: TextView? = null
     private var lastNumeric: Boolean = false
     private var lastDot : Boolean = false
+    private var selectedOperator: String? = null
+    private var leftSideValue: Double? = null
+    private var rightSideValue: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     fun onClear(view: View) {
         tvResult?.text = ""
+        leftSideValue = null
+        rightSideValue = null
         lastNumeric = false
         lastDot = false
     }
@@ -45,6 +50,9 @@ class MainActivity : AppCompatActivity() {
                 tvResult?.append((view as Button).text)
                 lastNumeric = false
                 lastDot = false
+                selectedOperator = (view as Button).text.toString()
+            }else if (lastNumeric && isOperatorAdded(it.toString())) {
+                onEqual(view)
             }
         }
     }
@@ -62,47 +70,47 @@ class MainActivity : AppCompatActivity() {
                 if (tvValue.contains("-")) {
                     val splitValue = tvValue.split("-")
 
-                    var leftSideValue = splitValue[0]
-                    var rightSideValue = splitValue[1]
+                    leftSideValue = splitValue[0].toDouble()
+                    rightSideValue = splitValue[1].toDouble()
 
                     if (prefix.isNotEmpty()) {
-                        leftSideValue = prefix + leftSideValue
+                        leftSideValue = -leftSideValue!!
                     }
 
-                    tvResult?.text = removeZeroAfterDot((leftSideValue.toDouble() - rightSideValue.toDouble()).toString())
+                    tvResult?.text = removeZeroAfterDot((leftSideValue!! - rightSideValue!!).toString())
                 } else if (tvValue.contains("+")) {
                     val splitValue = tvValue.split("+")
 
-                    var leftSideValue = splitValue[0]
-                    var rightSideValue = splitValue[1]
+                    leftSideValue = splitValue[0].toDouble()
+                    rightSideValue = splitValue[1].toDouble()
 
                     if (prefix.isNotEmpty()) {
-                        leftSideValue = prefix + leftSideValue
+                        leftSideValue = -leftSideValue!!
                     }
 
-                    tvResult?.text = removeZeroAfterDot((leftSideValue.toDouble() + rightSideValue.toDouble()).toString())
+                    tvResult?.text = removeZeroAfterDot((leftSideValue!! + rightSideValue!!).toString())
                 } else if (tvValue.contains("/")) {
                     val splitValue = tvValue.split("/")
 
-                    var leftSideValue = splitValue[0]
-                    var rightSideValue = splitValue[1]
+                    leftSideValue = splitValue[0].toDouble()
+                    rightSideValue = splitValue[1].toDouble()
 
                     if (prefix.isNotEmpty()) {
-                        leftSideValue = prefix + leftSideValue
+                        leftSideValue = -leftSideValue!!
                     }
 
-                    tvResult?.text = removeZeroAfterDot((leftSideValue.toDouble() / rightSideValue.toDouble()).toString())
+                    tvResult?.text = removeZeroAfterDot((leftSideValue!! / rightSideValue!!).toString())
                 } else if (tvValue.contains("*")) {
                     val splitValue = tvValue.split("*")
 
-                    var leftSideValue = splitValue[0]
-                    var rightSideValue = splitValue[1]
+                    leftSideValue = splitValue[0].toDouble()
+                    rightSideValue = splitValue[1].toDouble()
 
                     if (prefix.isNotEmpty()) {
-                        leftSideValue = prefix + leftSideValue
+                        leftSideValue = -leftSideValue!!
                     }
 
-                    tvResult?.text = removeZeroAfterDot((leftSideValue.toDouble() * rightSideValue.toDouble()).toString())
+                    tvResult?.text = removeZeroAfterDot((leftSideValue!! * rightSideValue!!).toString())
                 }
 
 
